@@ -2,7 +2,7 @@ package com.ohgiraffers.userservice.user.command.domain.service;
 
 
 import com.ohgiraffers.userservice.user.command.application.dto.request.UserCreateRequest;
-import com.ohgiraffers.userservice.user.command.domain.repository.UserRepository;
+import com.ohgiraffers.userservice.user.command.infrastructure.repository.JpaUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserDomainService {
 
-    private final UserRepository userRepository;
+    private final JpaUserRepository userRepository;
 
     public void validateValue(UserCreateRequest userCreateRequest) {
 

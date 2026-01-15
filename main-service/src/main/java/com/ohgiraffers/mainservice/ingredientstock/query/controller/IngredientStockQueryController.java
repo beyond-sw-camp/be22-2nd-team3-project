@@ -1,8 +1,8 @@
 package com.ohgiraffers.mainservice.ingredientstock.query.controller;
 
-import com.ohgiraffers.hw22thteamproject.common.dto.ApiResponse;
-import com.ohgiraffers.hw22thteamproject.ingredientstock.query.dto.response.IngredientStockResponse;
-import com.ohgiraffers.hw22thteamproject.ingredientstock.query.service.IngredientStockQueryService;
+import com.ohgiraffers.mainservice.common.dto.ApiResponse;
+import com.ohgiraffers.mainservice.ingredientstock.query.dto.response.IngredientStockResponse;
+import com.ohgiraffers.mainservice.ingredientstock.query.service.IngredientStockQueryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CookieValue;

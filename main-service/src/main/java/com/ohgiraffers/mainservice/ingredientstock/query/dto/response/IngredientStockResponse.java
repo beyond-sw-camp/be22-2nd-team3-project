@@ -1,6 +1,6 @@
 package com.ohgiraffers.mainservice.ingredientstock.query.dto.response;
 
-import com.ohgiraffers.hw22thteamproject.ingredientstock.command.domain.aggregate.IngredientStock;
+import com.ohgiraffers.mainservice.ingredientstock.command.domain.aggregate.IngredientStock;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 

@@ -18,17 +18,15 @@ import org.springframework.transaction.annotation.Transactional;
 public class DisposalCommandService {
 
     private final JwtTokenProvider jwtTokenProvider;
-    private final UserRepository userRepository;
     private final DisposalDomainRepository disposalDomainRepository; // JPA Repository
     private final IngredientStockDomainRepository ingredientStockDomainRepository;
 
     @Transactional
     public DisposalCreateResponse createDisposal(String refreshToken, DisposalCreateRequest disposalCreateRequest) {
         // createDispsal process
-        // 1) get User by UserNo from refreshToken
+        // 1) get userNo from refreshToken
         this.jwtTokenProvider.validateToken(refreshToken);
         long userNo = Long.parseLong(this.jwtTokenProvider.getUserNoFromJWT(refreshToken));
-        User user = this.userRepository.findByUserNo(userNo);
 
         // 2) get ingredientStockNo from disposalCreateRequest
         long ingredientStockNo = disposalCreateRequest.getIngredientStockNo();
@@ -42,7 +40,7 @@ public class DisposalCommandService {
         // 5) get ingredient_stock by ingredientStockNo and calculate disposal_cost
         // Double disposal_cost= disposalQuantity * (ingredient_stock_total_cost/ingredient_stock_total_quantity)
         IngredientStock ingredientStock = this.ingredientStockDomainRepository
-                .findByUser_UserNoAndIngredientStockNo(userNo, ingredientStockNo)
+                .findByUserNoAndIngredientStockNo(userNo, ingredientStockNo)
                 .orElseThrow(() -> new BusinessException(ErrorCode.INGREDIENT_STOCK_NOT_FOUND));
 
         // Calculate disposal cost
@@ -59,7 +57,7 @@ public class DisposalCommandService {
         // 7) create disposalHistory Entity
         DisposalHistory disposalHistory = DisposalHistory.createDisposalHistory(
                 ingredientStock,
-                user,
+                userNo,
                 disposalQuantity,
                 disposalCost,
                 disposalReason

@@ -1,10 +1,10 @@
 package com.ohgiraffers.userservice.config;
 
 
-import com.ohgiraffers.hw22thteamproject.jwt.JwtAuthenticationFilter;
-import com.ohgiraffers.hw22thteamproject.jwt.JwtTokenProvider;
-import com.ohgiraffers.hw22thteamproject.jwt.RestAccessDeniedHandler;
-import com.ohgiraffers.hw22thteamproject.jwt.RestAuthenticationEntryPoint;
+import com.ohgiraffers.userservice.jwt.JwtAuthenticationFilter;
+import com.ohgiraffers.userservice.jwt.JwtTokenProvider;
+import com.ohgiraffers.userservice.jwt.RestAccessDeniedHandler;
+import com.ohgiraffers.userservice.jwt.RestAuthenticationEntryPoint;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

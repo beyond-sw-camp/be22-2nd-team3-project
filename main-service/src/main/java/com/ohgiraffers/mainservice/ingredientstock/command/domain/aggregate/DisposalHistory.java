@@ -26,9 +26,8 @@ public class DisposalHistory {
     private IngredientStock ingredientStockNo;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "user_no", nullable = false)
-    private User userNo;
+    @Column(name = "user_no", nullable = false)
+    private Long userNo;
 
     @NotNull
     @Column(name = "disposal_quantity", nullable = false)
@@ -59,14 +58,14 @@ public class DisposalHistory {
 
     public static DisposalHistory createDisposalHistory(
             IngredientStock ingredientStock,
-            User user,
+            Long userNo,
             long disposalQuantity,
             double disposalCost,
             String disposalReason
     ) {
         DisposalHistory disposalHistory = new DisposalHistory();
         disposalHistory.ingredientStockNo = ingredientStock;
-        disposalHistory.userNo = user;
+        disposalHistory.userNo = userNo;
         disposalHistory.disposalQuantity = disposalQuantity;
         disposalHistory.disposalCost = disposalCost;
         disposalHistory.disposalReason = disposalReason;

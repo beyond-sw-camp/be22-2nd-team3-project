@@ -1,9 +1,9 @@
 package com.ohgiraffers.mainservice.notification.query.service;
 
-import com.ohgiraffers.hw22thteamproject.jwt.JwtTokenProvider;
-import com.ohgiraffers.hw22thteamproject.notification.query.dto.response.NotificationDTO;
-import com.ohgiraffers.hw22thteamproject.notification.query.dto.response.NotificationResponse;
-import com.ohgiraffers.hw22thteamproject.notification.query.mapper.NotificationMapper;
+import com.ohgiraffers.mainservice.jwt.JwtTokenProvider;
+import com.ohgiraffers.mainservice.notification.query.dto.response.NotificationDTO;
+import com.ohgiraffers.mainservice.notification.query.dto.response.NotificationResponse;
+import com.ohgiraffers.mainservice.notification.query.mapper.NotificationMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

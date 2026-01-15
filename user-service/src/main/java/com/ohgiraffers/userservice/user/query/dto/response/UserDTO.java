@@ -1,7 +1,10 @@
 package com.ohgiraffers.userservice.user.query.dto.response;
 
+import com.ohgiraffers.userservice.user.command.domain.aggregate.UserRole;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
@@ -18,5 +21,6 @@ public class UserDTO {
     private String birthdate;
     private Date registeredAt;
     private String isNoticeActive;
+    private UserRole role;
 
 }

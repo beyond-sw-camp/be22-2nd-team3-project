@@ -34,8 +34,8 @@ public class DishDTO {
 
     public static DishDTO from(Dish dish) {
         return DishDTO.builder()
-                .dishNo(dish.getId())
-                .userNo(dish.getUserNo().getUserNo().intValue())
+                .dishNo(dish.getDishNo())
+                .userNo(dish.getUserNo().intValue())
                 .dishCategoryNo(dish.getDishCategoryNo().getId())
                 .dishName(dish.getDishName())
                 .dishImgFileRoute(dish.getDishImgFileRoute())

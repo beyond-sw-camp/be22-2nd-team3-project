@@ -1,9 +1,9 @@
 package com.ohgiraffers.mainservice.ingredientstock.query.service;
 
-import com.ohgiraffers.hw22thteamproject.ingredientstock.command.domain.aggregate.IngredientStock;
-import com.ohgiraffers.hw22thteamproject.ingredientstock.query.dto.response.IngredientStockResponse;
-import com.ohgiraffers.hw22thteamproject.ingredientstock.query.mapper.IngredientStockMapper;
-import com.ohgiraffers.hw22thteamproject.jwt.JwtTokenProvider;
+import com.ohgiraffers.mainservice.ingredientstock.command.domain.aggregate.IngredientStock;
+import com.ohgiraffers.mainservice.ingredientstock.query.dto.response.IngredientStockResponse;
+import com.ohgiraffers.mainservice.ingredientstock.query.mapper.IngredientStockMapper;
+import com.ohgiraffers.mainservice.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

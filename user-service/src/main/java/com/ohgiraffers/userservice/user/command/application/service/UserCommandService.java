@@ -12,8 +12,8 @@ import com.ohgiraffers.userservice.user.command.application.dto.response.TokenRe
 import com.ohgiraffers.userservice.user.command.domain.aggregate.RefreshToken;
 import com.ohgiraffers.userservice.user.command.domain.aggregate.User;
 import com.ohgiraffers.userservice.user.command.domain.aggregate.UserStatus;
-import com.ohgiraffers.userservice.user.command.domain.repository.UserAuthRepository;
-import com.ohgiraffers.userservice.user.command.domain.repository.UserRepository;
+import com.ohgiraffers.userservice.user.command.infrastructure.repository.JpaUserAuthRepository;
+import com.ohgiraffers.userservice.user.command.infrastructure.repository.JpaUserRepository;
 import com.ohgiraffers.userservice.user.command.domain.service.UserDomainService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -31,8 +31,8 @@ import java.util.Date;
 @RequiredArgsConstructor
 public class UserCommandService {
 
-    private final UserRepository userRepository;
-    private final UserAuthRepository userAuthRepository;
+    private final JpaUserRepository userRepository;
+    private final JpaUserAuthRepository userAuthRepository;
     private final ModelMapper modelMapper;
     private final PasswordEncoder passwordEncoder;
     private final UserDomainService userDomainService;
