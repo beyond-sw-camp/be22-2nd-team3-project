@@ -44,13 +44,13 @@ Content-Type: application/json
 Authorization: Bearer {{auth_token}}
 
 {
-    "dishNo": 1,
+    "dishNo": 2,
     "dishName": "참치 김치찌개",
     "dishCategoryEnum": "KOREAN"
 }
 
 ### 5. 요리 삭제
-DELETE http://localhost:8000/api/v1/recipe-service/dishes/1
+DELETE http://localhost:8000/api/v1/recipe-service/dishes/2
 Authorization: Bearer {{auth_token}}
 
 
@@ -88,7 +88,7 @@ Content-Type: application/json
 Authorization: Bearer {{auth_token}}
 
 {
-    "recipeNo": 1,
+    "recipeNo": 3,
     "ingredients": [
          {
             "name": "김치",
@@ -108,7 +108,7 @@ Authorization: Bearer {{auth_token}}
 }
 
 ### 8. 레시피 삭제
-DELETE http://localhost:8000/api/v1/recipe-service/recipes/delete?recipeNo=1
+DELETE http://localhost:8000/api/v1/recipe-service/recipes/delete?recipeNo=2
 Authorization: Bearer {{auth_token}}
 
 
