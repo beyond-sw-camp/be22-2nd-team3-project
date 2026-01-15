@@ -1,6 +1,7 @@
 package com.ohgiraffers.gatewayserver.filter;
 
-import com.ohgiraffers.gateway.jwt.GatewayJwtTokenProvider;
+
+import com.ohgiraffers.gatewayserver.jwt.GatewayJwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
@@ -44,15 +45,18 @@ public class JwtAuthenticationFilter implements GlobalFilter, Ordered {
         }
 
         // 5. 토큰이 유효하다면, 토큰 안에 있는 사용자 정보(ID, Role)를 꺼내옴
-        Long userId = jwtTokenProvider.getUserIdFromJWT(token);
-        String role = jwtTokenProvider.getRoleFromJWT(token);
+        Long userNo = jwtTokenProvider.getUserNoFromJWT(token); // PK값
+        String userId = jwtTokenProvider.getUserIdFromJWT(token); // user Id 값
+        String role = jwtTokenProvider.getRoleFromJWT(token); // user role
+
 
         // 6. [중요] 백엔드 마이크로서비스(first-service 등)가 사용할 수 있도록 
         //    사용자 정보를 헤더('X-User-Id', 'X-User-Role')에 담아서 전달함.
         //    (WebFlux에서 요청 객체는 불변(Immutable)이므로 mutate()를 사용해 복제본을 만든다)
         ServerHttpRequest mutateRequest = exchange.getRequest().mutate()
-                .header("X-User-Id", String.valueOf(userId))
+                .header("X-User-Id", userId)
                 .header("X-User-Role", role)
+                .header("X-User-No", String.valueOf(userNo))
                 .build();
 
         // 7. 변경 된 요청 객체를 포함하는 새로운 ServerWebExchange를 생성하여 다음 필터로 전달함

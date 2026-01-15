@@ -37,7 +37,7 @@ public class Recipe {
 	@NotNull
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "dish_no", nullable = false)
-	private Dish dishNo;
+	private Dish dish;
 
 	@Size(max = 1000)
 	@NotNull

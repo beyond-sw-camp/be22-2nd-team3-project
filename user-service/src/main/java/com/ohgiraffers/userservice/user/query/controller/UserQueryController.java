@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1")
 public class UserQueryController {
 
     private final UserQueryService userQueryService;
@@ -23,6 +22,12 @@ public class UserQueryController {
     @GetMapping("/users/{user_id}")
     public ResponseEntity<ApiResponse<UserDetailResponse>> getUser(@PathVariable("user_id") String userId) {
         UserDetailResponse response = this.userQueryService.getUser(userId);
+        return ResponseEntity.ok(ApiResponse.success(response));
+    }
+
+    @GetMapping("/users/by-no/{user_no}")
+    public ResponseEntity<ApiResponse<UserDetailResponse>> getUserByUserNo(@PathVariable("user_no") Long userNo) {
+        UserDetailResponse response = this.userQueryService.getUserByUserNo(userNo);
         return ResponseEntity.ok(ApiResponse.success(response));
     }
 

@@ -2,10 +2,7 @@ package com.ohgiraffers.mainservice.config;
 
 
 
-import com.ohgiraffers.mainservice.jwt.JwtAuthenticationFilter;
-import com.ohgiraffers.mainservice.jwt.JwtTokenProvider;
-import com.ohgiraffers.mainservice.jwt.RestAccessDeniedHandler;
-import com.ohgiraffers.mainservice.jwt.RestAuthenticationEntryPoint;
+import com.ohgiraffers.mainservice.jwt.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -70,10 +67,15 @@ public class SecurityConfig {
                 )
                 // UsernamePasswordAuthenticationFilter 앞에 jwtAuthenticationFilter 필터를 추가
                 .addFilterBefore(
-                        new JwtAuthenticationFilter(jwtTokenProvider, userDetailsService),
+                        headerAuthenticationFilter(),
                         UsernamePasswordAuthenticationFilter.class
                 );
         return http.build();
+    }
+
+    @Bean
+    public HeaderAuthenticationFilter headerAuthenticationFilter() {
+        return new HeaderAuthenticationFilter();
     }
 
 }

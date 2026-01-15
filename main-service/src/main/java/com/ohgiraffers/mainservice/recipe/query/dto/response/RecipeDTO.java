@@ -32,7 +32,7 @@ public class RecipeDTO {
     public static RecipeDTO from(Recipe recipe) {
         return RecipeDTO.builder()
                 .recipeNo(recipe.getId())
-                .dishNo(recipe.getDishNo().getId())
+                .dishNo(recipe.getDish().getDishNo())
                 .recipeIngredient(recipe.getRecipeIngredient())
                 .recipeCookery(recipe.getRecipeCookery())
                 .createdAt(recipe.getCreatedAt())

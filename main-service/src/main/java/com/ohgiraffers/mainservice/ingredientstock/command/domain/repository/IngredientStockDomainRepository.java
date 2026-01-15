@@ -9,7 +9,7 @@ public interface IngredientStockDomainRepository {
 
     IngredientStock save(IngredientStock ingredientStock);
 
-    Optional<IngredientStock> findByUser_UserNoAndIngredientStockNo(long userNo, long ingredientStockNo);
+    Optional<IngredientStock> findByUserNoAndIngredientStockNo(long userNo, long ingredientStockNo);
 
-    List<IngredientStock> findAllByUser_UserNo(long userNo);
+    List<IngredientStock> findAllByUserNo(long userNo);
 }

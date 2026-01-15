@@ -22,12 +22,11 @@ public class Dish {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "dish_no", nullable = false)
-	private Integer id;
+	private Integer dishNo;
 
 	@NotNull
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "user_no", nullable = false)
-	private User userNo;
+	@Column(name = "user_no", nullable = false)
+	private Long userNo;
 
 	@Size(max = 100)
 	@NotNull
@@ -45,7 +44,7 @@ public class Dish {
 	private Boolean dishIsMarked = false;
 
 	@Builder.Default
-	@OneToMany(mappedBy = "dishNo") // Recipe 엔티티 내의 필드명과 일치해야 함
+	@OneToMany(mappedBy = "dish") // Recipe 엔티티 내의 필드명과 일치해야 함
 	private Set<Recipe> recipes = new LinkedHashSet<>();
 
 	@NotNull

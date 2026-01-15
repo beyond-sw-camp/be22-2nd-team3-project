@@ -5,6 +5,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
+import jakarta.validation.Payload;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -39,13 +40,15 @@ public class GatewayJwtTokenProvider {
     }
 
     // 토큰 payload(내용물)에서 userId 꺼내오기
-    public Long getUserIdFromJWT(String token) {
+    public String getUserIdFromJWT(String token) {
+        // 1. 토큰을 파싱하기 위한 Parser를 생성하고 서명 키를 설정합니다.
         Claims claims = Jwts.parser()
-                .verifyWith(secretKey)
+                .verifyWith(secretKey) // 토큰 생성 시 사용한 secretKey와 동일해야 함
                 .build()
-                .parseSignedClaims(token)
-                .getPayload();
-        return claims.get("userId", Long.class);
+                .parseSignedClaims(token) // 서명된 JWT를 해석
+                .getPayload(); // 내부의 Claims(Payload)를 가져옴
+        // 2. createToken에서 .subject(userId)로 저장했으므로 getSubject()로 꺼냅니다.
+        return claims.getSubject();
     }
 
     // 토큰 payload(내용물)에서 role(권한) 꺼내오기
@@ -58,4 +61,12 @@ public class GatewayJwtTokenProvider {
         return claims.get("role", String.class);
     }
 
+    public Long getUserNoFromJWT(String token) {
+        Claims claims = Jwts.parser()
+                .verifyWith(secretKey)
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
+        return Long.parseLong(claims.get("userNo", String.class));
+    }
 }

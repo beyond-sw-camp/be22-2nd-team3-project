@@ -31,7 +31,6 @@ import java.util.List;
 public class IngredientStockCommandService {
 
     private final JwtTokenProvider jwtTokenProvider;
-    private final UserRepository userRepository;
     private final IngredientStockDomainService ingredientStockDomainService;
     private final ModelMapper modelMapper;
     private final IngredientStockDomainRepository ingredientStockDomainRepository;
@@ -40,15 +39,11 @@ public class IngredientStockCommandService {
 
     @Transactional
     public IngredientStockCreateResponse registIngredientStock(
-            String refreshToken,
+            String userNo,
             IngredientStockCreateRequest ingredientStockCreateRequest
     ) {
-        // 1. 로그인한 유저의 userNo(User.user_no) 가져오기
-        this.jwtTokenProvider.validateToken(refreshToken);
-        long userNo = Long.parseLong(this.jwtTokenProvider.getUserNoFromJWT(refreshToken));
-
-        // User객체 가져오기
-        User user = this.userRepository.findByUserNo(userNo);
+        // userNo parse to long
+        long loginUserNo = Long.parseLong(userNo);
 
         // 2. 사용자로부터 입력받은 ingredientStockCreateRequest 검증 (필수?)
         this.ingredientStockDomainService.validateValue(ingredientStockCreateRequest);
@@ -56,7 +51,7 @@ public class IngredientStockCommandService {
         // 3. ingredientStockCreateRequest(DTO) -> ingredientStock Entity로 변환
         IngredientStock ingredientStock = this.modelMapper.map(ingredientStockCreateRequest, IngredientStock.class);
         ingredientStock.InitTime();
-        ingredientStock.setUser(user);
+        ingredientStock.setUserNo(loginUserNo);
 
         // 4. ingredient_stock DB table 에 저장
         this.ingredientStockDomainRepository.save(ingredientStock);
@@ -66,20 +61,17 @@ public class IngredientStockCommandService {
 
     @Transactional
     public IngredientStockUpdateResponse updateIngredientStock(
-            String refreshToken, // user_no를 가져오기 위한 Token 객체
+            String userNo, // user_no를 가져오기 위한 Token 객체
             IngredientStockUpdateRequest ingredientStockUpdateRequest // 업데이트 내용을 담고있는 객체
     ) {
-        // 1. 토큰 유효성 검사
-        this.jwtTokenProvider.validateToken(refreshToken);
-
         // 2. user_no, ingredient_stock_no 가져오기
-        long userNo = Long.parseLong(this.jwtTokenProvider.getUserNoFromJWT(refreshToken));
+        long userNoValue = Long.parseLong(userNo);
         long ingredientStockNo = ingredientStockUpdateRequest.getIngredientStockNo();
 
         // 3. ingredient_stock table에서 user_no, ingredient_stock_no 가 일치하는 칼럼
         // ingredientStockDomainRepository사용해 가져오기
         IngredientStock ingredientStock = this.ingredientStockDomainRepository
-                .findByUser_UserNoAndIngredientStockNo(userNo, ingredientStockNo)
+                .findByUserNoAndIngredientStockNo(userNoValue, ingredientStockNo)
                 .orElseThrow(() -> new BusinessException(ErrorCode.INGREDIENT_STOCK_NOT_FOUND));
 
         // 4. ingredientStockUpdateRequest.getIngredientStockNowQuantity() 가져와 불러온 칼럼에 업데이트
@@ -108,11 +100,8 @@ public class IngredientStockCommandService {
         // user_no 가져오기
         long userNo = Long.parseLong(this.jwtTokenProvider.getUserNoFromJWT(refreshToken));
 
-        // User 엔티티 가져오기
-        User user = this.userRepository.findByUserNo(userNo);
-
         // user_no가 일치하는 ingredient_stock 데이터 모두 가져오기
-        List<IngredientStock> ingredientStocks = this.ingredientStockDomainRepository.findAllByUser_UserNo(userNo);
+        List<IngredientStock> ingredientStocks = this.ingredientStockDomainRepository.findAllByUserNo(userNo);
 
         // 유통기한임박 ingredient stock 추출
         List<IngredientStock> filteredStockListA = this.ingredientStockDomainService.filterExpiredSoonStock(ingredientStocks);
@@ -137,7 +126,7 @@ public class IngredientStockCommandService {
         for (IngredientStock stock : filteredStockListA) {
             long daysRemaining = ChronoUnit.DAYS.between(now, stock.getIngredientStockExpiredAt());
             String content = stock.getIngredientStockName() + " 유통기한이 " + daysRemaining + "일 남음";
-            Notification notification = Notification.createNotification(user, expiryNotificationType, content);
+            Notification notification = Notification.createNotification(userNo, expiryNotificationType, content);
             notifications.add(notification);
         }
 
@@ -146,7 +135,7 @@ public class IngredientStockCommandService {
             String content = stock.getIngredientStockName() + " 재고가 "
                     + stock.getIngredientStockNowQuantity()
                     + stock.getIngredientStockUnit() + " 남음";
-            Notification notification = Notification.createNotification(user, lowStockNotificationType, content);
+            Notification notification = Notification.createNotification(userNo, lowStockNotificationType, content);
             notifications.add(notification);
         }
 

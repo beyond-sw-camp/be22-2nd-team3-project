@@ -1,6 +1,6 @@
 package com.ohgiraffers.mainservice.ingredientstock.query.mapper;
 
-import com.ohgiraffers.hw22thteamproject.ingredientstock.command.domain.aggregate.IngredientStock;
+import com.ohgiraffers.mainservice.ingredientstock.command.domain.aggregate.IngredientStock;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;

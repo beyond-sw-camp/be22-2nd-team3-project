@@ -1,7 +1,9 @@
 package com.ohgiraffers.mainservice.recipe.command.application.service;
 
-import java.util.List;
-
+import com.ohgiraffers.mainservice.common.client.UserServiceClient;
+import com.ohgiraffers.mainservice.common.dto.ApiResponse;
+import com.ohgiraffers.mainservice.common.dto.UserDTO;
+import com.ohgiraffers.mainservice.common.dto.UserDetailResponse;
 import com.ohgiraffers.mainservice.recipe.command.application.dto.CookeryUtils;
 import com.ohgiraffers.mainservice.recipe.command.application.dto.RecipeIngredient;
 import com.ohgiraffers.mainservice.recipe.command.application.dto.request.RecipeCreateRequest;
@@ -16,20 +18,19 @@ import com.ohgiraffers.mainservice.recipe.command.domain.repository.RecipeReposi
 import com.ohgiraffers.mainservice.recipe.command.domain.repository.RecommendRecipeRepository;
 import com.ohgiraffers.mainservice.recipe.command.infrastructure.service.RecipeRecommendService;
 import com.ohgiraffers.mainservice.recipe.query.dto.response.RecipeDTO;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
-
-import lombok.RequiredArgsConstructor;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class RecipeCommandService {
 
 	private final DishRepository dishRepository;
-	private final UserMapper userMapper;
+	private final UserServiceClient userServiceClient;
 	private final ModelMapper modelMapper;
 	private final RecipeRecommendService recipeRecommendService;
 	private final RecommendRecipeRepository recommendRecipeRepository;
@@ -44,7 +45,7 @@ public class RecipeCommandService {
 
 		// 2. Recipe 생성
 		Recipe savedRecipe = Recipe.builder()
-				.dishNo(dish)
+				.dish(dish)
 				.recipeIngredient(RecipeIngredient.listToString(request.getIngredients()))
 				.recipeCookery(CookeryUtils.listToString(request.getCookery()))
 				.build();
@@ -85,17 +86,11 @@ public class RecipeCommandService {
 		// 2. 추천 결과 저장용 엔티티 변환
 		RecommendRecipe recommendRecipe = modelMapper.map(recipeRecommendation, RecommendRecipe.class);
 
-		// 3. UserDetails에서 가져온 username으로 유저 조회
-		UserDTO userDTO = userMapper.selectUserByUserId(username);
-		if (userDTO == null) {
-			throw new IllegalArgumentException("사용자를 찾을 수 없습니다.");
-		}
+		// 3. Feign client로 유저 조회
+		Long userNo = getUserNoByUserId(username);
 
-		// 4. 조회된 유저의 PK(userNo)를 설정
-		User user = modelMapper.map(userDTO, User.class);
-
-		// RecommendRecipe 엔티티의 userNo 필드 타입에 맞게 설정 (int로 가정)
-		recommendRecipe.setUserNo(user.getUserNo().intValue());
+		// 4. RecommendRecipe 엔티티의 userNo 필드 타입에 맞게 설정 (int로 가정)
+		recommendRecipe.setUserNo(userNo.intValue());
 
 		recommendRecipeRepository.save(recommendRecipe);
 		return recipeRecommendation;
@@ -112,10 +107,22 @@ public class RecipeCommandService {
 		return RecipeDTO.from(
 				recipeRepository.save(
 						Recipe.builder()
-								.dishNo(dish)
+								.dish(dish)
 								.recipeIngredient(rcdRecipe.getRcdRecipeIngredients())
 								.recipeCookery(rcdRecipe.getRcdRecipeCookery())
 								.build())
 				);
+	}
+
+	private Long getUserNoByUserId(String userId) {
+		ApiResponse<UserDetailResponse> response = userServiceClient.getUserByUserId(userId);
+		if (response == null || !response.getSuccess() || response.getData() == null) {
+			throw new IllegalArgumentException("사용자를 찾을 수 없습니다.");
+		}
+		UserDTO user = response.getData().getUser();
+		if (user == null) {
+			throw new IllegalArgumentException("사용자를 찾을 수 없습니다.");
+		}
+		return user.getUserNo();
 	}
 }

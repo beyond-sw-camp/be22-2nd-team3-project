@@ -1,7 +1,7 @@
 package com.ohgiraffers.userservice.exception;
 
 
-import com.ohgiraffers.hw22thteamproject.common.dto.ApiResponse;
+import com.ohgiraffers.userservice.common.dto.ApiResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;

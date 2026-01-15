@@ -22,9 +22,8 @@ public class IngredientStock {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long ingredientStockNo;
 
-    @JoinColumn(name = "user_no", nullable = false)
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    private User user;
+    @Column(name = "user_no", nullable = false)
+    private Long userNo;
 
     @Column(name = "ingredient_stock_name", nullable = false)
     private String ingredientStockName;
@@ -61,8 +60,8 @@ public class IngredientStock {
     private LocalDateTime updatedAt;
 
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserNo(Long userNo) {
+        this.userNo = userNo;
     }
 
     public void InitTime() {

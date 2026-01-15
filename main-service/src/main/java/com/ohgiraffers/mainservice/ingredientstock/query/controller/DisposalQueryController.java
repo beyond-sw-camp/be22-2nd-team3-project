@@ -1,16 +1,14 @@
 package com.ohgiraffers.mainservice.ingredientstock.query.controller;
 
-import com.ohgiraffers.hw22thteamproject.common.dto.ApiResponse;
-import com.ohgiraffers.hw22thteamproject.ingredientstock.query.dto.response.DisposalHistoryResponse;
-import com.ohgiraffers.hw22thteamproject.ingredientstock.query.service.DisposalQueryService;
+import com.ohgiraffers.mainservice.common.dto.ApiResponse;
+import com.ohgiraffers.mainservice.ingredientstock.query.dto.response.DisposalHistoryResponse;
+import com.ohgiraffers.mainservice.ingredientstock.query.service.DisposalQueryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor

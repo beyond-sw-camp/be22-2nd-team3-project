@@ -2,7 +2,6 @@ package com.ohgiraffers.mainservice.recipe.command.domain.repository;
 
 
 
-import com.ohgiraffers.mainservice.recipe.command.domain.aggregate.Dish;
 import com.ohgiraffers.mainservice.recipe.command.domain.aggregate.Recipe;
 
 import java.util.List;
@@ -16,7 +15,7 @@ public interface RecipeRepository {
 
 	void deleteById(Integer id);
 
-	List<Recipe> findByDishNo(Dish dish);
+	List<Recipe> findByDish_DishNo(Integer dish);
 
 	void deleteAll(Iterable<? extends Recipe> entities);
 

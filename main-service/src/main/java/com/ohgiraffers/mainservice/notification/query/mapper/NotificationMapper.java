@@ -1,6 +1,6 @@
 package com.ohgiraffers.mainservice.notification.query.mapper;
 
-import com.ohgiraffers.hw22thteamproject.notification.query.dto.response.NotificationDTO;
+import com.ohgiraffers.mainservice.notification.query.dto.response.NotificationDTO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;

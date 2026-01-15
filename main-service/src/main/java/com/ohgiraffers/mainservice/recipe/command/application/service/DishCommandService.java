@@ -3,6 +3,10 @@ package com.ohgiraffers.mainservice.recipe.command.application.service;
 import java.util.List;
 import java.util.Optional;
 
+import com.ohgiraffers.mainservice.common.client.UserServiceClient;
+import com.ohgiraffers.mainservice.common.dto.ApiResponse;
+import com.ohgiraffers.mainservice.common.dto.UserDTO;
+import com.ohgiraffers.mainservice.common.dto.UserDetailResponse;
 import com.ohgiraffers.mainservice.recipe.command.application.dto.request.DishCreateRequest;
 import com.ohgiraffers.mainservice.recipe.command.application.dto.request.DishUpdateRequest;
 import com.ohgiraffers.mainservice.recipe.command.domain.aggregate.Dish;
@@ -27,7 +31,7 @@ public class DishCommandService {
 
 	private final RecommendRecipeRepository recommendRecipeRepository;
 	private final DishRepository dishRepository;
-	private final UserRepository userRepository;
+	private final UserServiceClient userServiceClient;
 	private final DishCategoryRepository dishCategoryRepository;
 	private final RecipeRepository recipeRepository;
 
@@ -37,6 +41,10 @@ public class DishCommandService {
 		// 추천레시피 조회
 		RecommendRecipe rcdRecipe = recommendRecipeRepository.findById(recommendRecipeNo)
 			.orElseThrow(() -> new IllegalArgumentException("추천레시피 데이터 없음"));
+
+		// Feign client로 유저 조회
+		Long userNo = getUserNoByUserId(username);
+
 		// 추천레시피의 이름으로 음식이 있는지 조회
 		Optional<Dish> dish = dishRepository.findByDishName(rcdRecipe.getRcdRecipeDishName());
 		// 음식이 없을 때 등록
@@ -44,8 +52,7 @@ public class DishCommandService {
 			resultDish = DishDTO.from(
 				dishRepository.save(
 					Dish.builder()
-						.userNo(userRepository.findByUserId(username)
-							.orElseThrow(() -> new IllegalArgumentException("유저 없음")))
+						.userNo(userNo)
 						.dishCategoryNo(dishCategoryRepository.findById(rcdRecipe.getDishCategoryNo())
 							.orElseThrow(() -> new IllegalArgumentException("카테고리 없음")))
 						.dishName(rcdRecipe.getRcdRecipeDishName())
@@ -62,10 +69,8 @@ public class DishCommandService {
 		DishCreateRequest request,
 		String username) {
 
-		// 1. 유저 조회
-		User user = userRepository
-			.findByUserId(username)
-			.orElseThrow(() -> new IllegalArgumentException("해당 유저를 찾을 수 없습니다."));
+		// 1. Feign client로 유저 조회
+		Long userNo = getUserNoByUserId(username);
 
 		// 2. 카테고리 조회
 		DishCategory category = dishCategoryRepository
@@ -74,7 +79,7 @@ public class DishCommandService {
 
 		// 3. Dish 엔티티 생성
 		Dish newDish = Dish.builder()
-			.userNo(user)
+			.userNo(userNo)
 			.dishCategoryNo(category)
 			.dishName(request.getDishName())
 			.dishImgFileRoute(null)
@@ -92,8 +97,9 @@ public class DishCommandService {
 		Dish dish = dishRepository.findById(request.getDishNo())
 			.orElseThrow(() -> new IllegalArgumentException("해당 요리를 찾을 수 없습니다."));
 
-		// 2. 권한 확인
-		if (!dish.getUserNo().getUserId().equals(username)) {
+		// 2. Feign client로 유저 조회 및 권한 확인
+		Long userNo = getUserNoByUserId(username);
+		if (!dish.getUserNo().equals(userNo)) {
 			throw new IllegalArgumentException("수정 권한이 없습니다.");
 		}
 
@@ -114,17 +120,30 @@ public class DishCommandService {
 		Dish dish = dishRepository.findById(dishNo)
 			.orElseThrow(() -> new IllegalArgumentException("해당 요리를 찾을 수 없습니다."));
 
-		// 2. 권한 확인
-		if (!dish.getUserNo().getUserId().equals(username)) {
+		// 2. Feign client로 유저 조회 및 권한 확인
+		Long userNo = getUserNoByUserId(username);
+		if (!dish.getUserNo().equals(userNo)) {
 			throw new IllegalArgumentException("삭제 권한이 없습니다.");
 		}
 
 		// 3. 연관된 Recipe 삭제
 		List<Recipe> recipes = recipeRepository
-			.findByDishNo(dish);
+			.findByDish_DishNo(dish.getDishNo());
 		recipeRepository.deleteAll(recipes);
 
 		// 4. Dish 삭제
-		dishRepository.deleteById(dish.getId());
+		dishRepository.deleteById(dish.getDishNo());
+	}
+
+	private Long getUserNoByUserId(String userId) {
+		ApiResponse<UserDetailResponse> response = userServiceClient.getUserByUserId(userId);
+		if (response == null || !response.getSuccess() || response.getData() == null) {
+			throw new IllegalArgumentException("해당 유저를 찾을 수 없습니다.");
+		}
+		UserDTO user = response.getData().getUser();
+		if (user == null) {
+			throw new IllegalArgumentException("해당 유저를 찾을 수 없습니다.");
+		}
+		return user.getUserNo();
 	}
 }
