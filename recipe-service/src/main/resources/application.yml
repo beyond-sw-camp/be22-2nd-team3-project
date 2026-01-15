@@ -12,7 +12,7 @@ eureka:
 
 spring:
   application:
-    name: main-service
+    name: recipe-service
   config:
     import:
       - classpath:/bootstrap.yml

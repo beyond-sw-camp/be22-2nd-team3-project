@@ -8,7 +8,6 @@ import com.ohgiraffers.mainservice.recipe.command.application.service.DishComman
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import io.swagger.v3.oas.annotations.Operation;
@@ -32,10 +31,8 @@ public class DishCommandController {
     @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "요리 등록 성공")
     @PostMapping
     public ResponseEntity<ApiResponse<Void>> registDish(@RequestBody DishCreateRequest request,
-                                                        @AuthenticationPrincipal UserDetails userDetails) {
-
-        String username = userDetails.getUsername();
-        dishCommandService.registDish(request, username);
+                                                        @AuthenticationPrincipal String userNo) {
+        dishCommandService.registDish(request, Long.valueOf(userNo));
 
         return ResponseEntity.ok(ApiResponse.success(null));
     }
@@ -45,10 +42,9 @@ public class DishCommandController {
     @PutMapping("/update")
     public ResponseEntity<ApiResponse<Void>> updateDish(
             @RequestBody DishUpdateRequest request,
-            @AuthenticationPrincipal UserDetails userDetails) {
+        @AuthenticationPrincipal String userNo) {
 
-        String username = userDetails.getUsername();
-        dishCommandService.updateDish(request, username);
+        dishCommandService.updateDish(request, Long.valueOf(userNo));
 
         return ResponseEntity.ok(ApiResponse.success(null));
     }
@@ -58,10 +54,9 @@ public class DishCommandController {
     @DeleteMapping("/{dishNo}")
     public ResponseEntity<ApiResponse<Void>> deleteDish(
             @Parameter(description = "요리 번호") @PathVariable Integer dishNo,
-            @AuthenticationPrincipal UserDetails userDetails) {
+            @AuthenticationPrincipal String userNo) {
 
-        String username = userDetails.getUsername();
-        dishCommandService.deleteDish(dishNo, username);
+        dishCommandService.deleteDish(dishNo, Long.valueOf(userNo));
 
         return ResponseEntity.ok(ApiResponse.success(null));
     }

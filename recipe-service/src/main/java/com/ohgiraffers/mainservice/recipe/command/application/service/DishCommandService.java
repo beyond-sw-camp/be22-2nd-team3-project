@@ -67,10 +67,7 @@ public class DishCommandService {
 	@Transactional
 	public void registDish(
 		DishCreateRequest request,
-		String username) {
-
-		// 1. Feign client로 유저 조회
-		Long userNo = getUserNoByUserId(username);
+		Long userNo) {
 
 		// 2. 카테고리 조회
 		DishCategory category = dishCategoryRepository
@@ -92,13 +89,12 @@ public class DishCommandService {
 	@Transactional
 	public void updateDish(
 		DishUpdateRequest request,
-		String username) {
+		Long userNo) {
 		// 1. Dish 조회
 		Dish dish = dishRepository.findById(request.getDishNo())
 			.orElseThrow(() -> new IllegalArgumentException("해당 요리를 찾을 수 없습니다."));
 
 		// 2. Feign client로 유저 조회 및 권한 확인
-		Long userNo = getUserNoByUserId(username);
 		if (!dish.getUserNo().equals(userNo)) {
 			throw new IllegalArgumentException("수정 권한이 없습니다.");
 		}
@@ -115,13 +111,12 @@ public class DishCommandService {
 	}
 
 	@Transactional
-	public void deleteDish(Integer dishNo, String username) {
+	public void deleteDish(Integer dishNo, Long userNo) {
 		// 1. Dish 조회
 		Dish dish = dishRepository.findById(dishNo)
 			.orElseThrow(() -> new IllegalArgumentException("해당 요리를 찾을 수 없습니다."));
 
 		// 2. Feign client로 유저 조회 및 권한 확인
-		Long userNo = getUserNoByUserId(username);
 		if (!dish.getUserNo().equals(userNo)) {
 			throw new IllegalArgumentException("삭제 권한이 없습니다.");
 		}
