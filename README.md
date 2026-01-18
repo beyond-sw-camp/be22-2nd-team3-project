@@ -37,10 +37,10 @@
 ### 👨‍💻 팀원 및 담당 역할 (R&R)
 저희 Team 3는 "데이터와 기술로 식탁의 낭비를 줄이자"는 목표 아래 뭉친 4인의 개발자입니다.
 
-| 팀원명 | [정현호](https://github.com/gusgh075)(팀장)                       | [김신우](https://github.com/rlatlsdn98)                  | [황자현](https://github.com/jahyun725)                 | [임원석](https://github.com/LimRaynor)                    |
-| :--- |:-------------------------------------------------------------|:------------------------------------------------------|:----------------------------------------------------|:-------------------------------------------------------|
-| **사진** | ![현호](https://via.placeholder.com/150)                       | ![신우](https://via.placeholder.com/150)                | ![자현](https://via.placeholder.com/150)              | ![원석](https://via.placeholder.com/150)                 |
-| **역할** | **Content & AI**<br>AI 레시피 추천<br>레시피, 음식 도메인<br>데이터 파이프라인 구축 | **Member & Security**<br>회원 관리 도메인 및<br>JWT 인증/인가 시스템 | **Statistics & Data**<br>통계 분석 알고리즘 및<br>데이터 정합성 관리 | **Notification & Logic**<br>지능형 알림 시스템 및<br>비즈니스 예외 처리 |
+| 팀원명 | [정현호](https://github.com/gusgh075)(팀장)                                        | [김신우](https://github.com/rlatlsdn98)                  | [황자현](https://github.com/jahyun725)                 | [임원석](https://github.com/LimRaynor)                    |
+| :--- |:------------------------------------------------------------------------------|:------------------------------------------------------|:----------------------------------------------------|:-------------------------------------------------------|
+| **사진** | <img src="documents/image/introduce-team/Icee.jpg" width="100" height="100"/> | <img src="documents/image/introduce-team/Grizzly_Bear_Standing.jpg" width="100" height="100"/>                                                      | <img src="documents/image/introduce-team/chloe.jpg" width="100" height="100"/>              | <img src="documents/image/introduce-team/Pandanda.jpg" width="100" height="100"/>                 |
+| **역할** | **Content & AI**<br>AI 레시피 추천<br>레시피, 음식 도메인<br>데이터 파이프라인 구축                  | **Member & Security**<br>회원 관리 도메인 및<br>JWT 인증/인가 시스템 | **Statistics & Data**<br>통계 분석 알고리즘 및<br>데이터 정합성 관리 | **Notification & Logic**<br>지능형 알림 시스템 및<br>비즈니스 예외 처리 |
 
 ### 🤝 팀의 강점
 * **역할 분담:** 도메인 주도 설계(DDD) 원칙에 따라 핵심 파트를 전담하여 전문성을 높였습니다.
