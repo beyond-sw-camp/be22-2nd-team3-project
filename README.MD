@@ -58,13 +58,14 @@
 
 ### 🛠 기술 스택 소개 - 기술 아이콘으로 대체할 예정
 
-* **Backend:** Java 17, Spring Boot 3.x
-* **MSA Infra:** Spring Cloud Config, Netflix Eureka, Spring Cloud Gateway
-* **ORM/Mapper (CQRS):** - **Command(CUD):** Spring Data JPA (데이터 정합성 및 DDD 보장)
-    - **Query(Read):** MyBatis (복잡한 통계 쿼리 및 대용량 조회 성능 최적화)
-* **Security:** Spring Security, JWT (Antigravity 프로젝트 보안 모델 참조)
-* **Database:** MariaDB (Main)
-* **External API:** Spring-gen-ai (생성형 AI API)
+| Category | Skills |
+| :--- | :--- |
+| **Backend** | <img src="https://img.shields.io/badge/Java_17-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white"> <img src="https://img.shields.io/badge/SpringBoot_3.5.9-6DB33F?style=for-the-badge&logo=springboot&logoColor=white"> |
+| **MSA Infra** | <img src="https://img.shields.io/badge/Spring_Cloud-6DB33F?style=for-the-badge&logo=spring&logoColor=white"> <img src="https://img.shields.io/badge/Config_Server-6DB33F?style=for-the-badge"> <img src="https://img.shields.io/badge/Eureka-6DB33F?style=for-the-badge"> <img src="https://img.shields.io/badge/Gateway-6DB33F?style=for-the-badge"> |
+| **ORM / Mapper** | <img src="https://img.shields.io/badge/Spring_Data_JPA-59666C?style=for-the-badge&logo=hibernate&logoColor=white"> <img src="https://img.shields.io/badge/MyBatis-000000?style=for-the-badge&logo=mybatis&logoColor=white"> |
+| **Security** | <img src="https://img.shields.io/badge/Spring_Security-6DB33F?style=for-the-badge&logo=springsecurity&logoColor=white"> <img src="https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white"> |
+| **Database** | <img src="https://img.shields.io/badge/MariaDB-003545?style=for-the-badge&logo=mariadb&logoColor=white"> <img src="https://img.shields.io/badge/Redis-DC382D?style=for-the-badge&logo=redis&logoColor=white"> |
+| **AI API** | <img src="https://img.shields.io/badge/Spring_AI-6DB33F?style=for-the-badge&logo=spring&logoColor=white"> |
 
 ### 🏗 시스템 아키텍처
 
