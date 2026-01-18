@@ -1,377 +1,116 @@
-# Empty the Fridge - MSA Project Review
-
-**Review Date:** 2026-01-16
-**Reviewer:** Claude Opus 4.5
-**Project:** Empty_the_fridge (masroot)
+# 🚀 냉장고를 부탁해 (Smart Fridge & AI Recipe)
+> **AI 기반 스마트 냉장고 식재료 관리 및 맞춤형 레시피 추천 서비스** > be22-2nd-team3-project: Monolithic에서 MSA로의 성공적인 전환
 
 ---
 
-## Executive Summary
-
-This is a well-structured Microservices Architecture (MSA) project for a food inventory management and recipe recommendation application. The project demonstrates solid architectural foundations with proper cloud-native patterns, but requires improvements in testing, observability, and deployment readiness.
-
-**Overall Assessment:** Good foundation with room for improvement in operational maturity.
+## 📑 목차
+1. [프로젝트 개요](#1-프로젝트-개요) (주제, 배경, 차별성)
+2. [팀 소개 및 역할](#2-팀-소개-및-역할) (R&R, 강점)
+3. [기술 및 구조](#3-기술-및-구조) (기술 스택, 아키텍처, 구조)
+4. [핵심 기능](#4-핵심-기능) (AI 레시피, 지능형 알림, 통계)
+5. [설계 및 규칙](#5-설계-및-규칙) (개발 규칙, WBS, 설계 문서)
+6. [성과 및 기대효과](#6-성과-및-기대효과)
 
 ---
 
-## 1. Project Overview
+## 1. 프로젝트 개요
 
-| Attribute | Value |
-|-----------|-------|
-| **Architecture** | Microservices (MSA) |
-| **Language** | Java 17 (LTS) |
-| **Framework** | Spring Boot 3.5.9 |
-| **Cloud Stack** | Spring Cloud 2025.0.1 |
-| **Build Tool** | Gradle (multi-module) |
+### 📝 주제 및 서비스 소개
+* **서비스 명:** 냉장고를 부탁해
+* **한 줄 요약:** 냉장고 속 식재료를 효율적으로 관리하고, 소비 데이터를 분석하여 낭비를 줄여주는 **지능형 식재료 관리 플랫폼**입니다.
+* **서비스 대상:**
+    - **1인 가구 (자취생):** 배달 음식을 줄이고 식재료를 알뜰하게 소진하고 싶은 2030 세대.
+    - **주부 및 요리 입문자:** 냉장고 파먹기를 실천하고 싶거나 매일 반찬 고민에 시달리는 사용자.
+    - **환경적 소비 추구자:** 제로 웨이스트(Zero Waste)를 실천하고자 하는 소비자.
 
-### Services Architecture
+### 📊 기획 배경 및 차별성
+* **기획 배경:** "냉장고에 재료는 있는데 무엇을 해 먹을지 모르는 문제"와 "관리 소홀로 인한 식재료 폐기 문제"를 해결하고자 '냉장고 관리'로 기획되었습니다.
+* **차별성:**
+    - **능동적 AI 추천:** AI에게 사용할 주 재료, 싫어하는 재료 등 세분화된 데이터를 전달해 소비자가 원하는 음식에 대한 레시피를 좀 더 정밀하게 추천해줍니다. 
+    - **지능형 알림:** 단순 날짜 경과뿐만 아니라, 잔여량 부족 시에도 알림을 발송하여 구매 시점을 제안합니다.
+    - **데이터 시각화:** 폐기율(%)과 비용(원)을 환산하여 사용자의 행동 변화를 유도합니다.
 
+---
+
+## 2. 팀 소개 및 역할
+
+### 👨‍💻 팀원 및 담당 역할 (R&R)
+저희 Team 3는 "데이터와 기술로 식탁의 낭비를 줄이자"는 목표 아래 뭉친 4인의 개발자입니다.
+
+| 팀원명 | [정현호](https://github.com/gusgh075)(팀장)                       | [김신우](https://github.com/rlatlsdn98)                  | [황자현](https://github.com/jahyun725)                 | [임원석](https://github.com/LimRaynor)                    |
+| :--- |:-------------------------------------------------------------|:------------------------------------------------------|:----------------------------------------------------|:-------------------------------------------------------|
+| **사진** | ![현호](https://via.placeholder.com/150)                       | ![신우](https://via.placeholder.com/150)                | ![자현](https://via.placeholder.com/150)              | ![원석](https://via.placeholder.com/150)                 |
+| **역할** | **Content & AI**<br>AI 레시피 추천<br>레시피, 음식 도메인<br>데이터 파이프라인 구축 | **Member & Security**<br>회원 관리 도메인 및<br>JWT 인증/인가 시스템 | **Statistics & Data**<br>통계 분석 알고리즘 및<br>데이터 정합성 관리 | **Notification & Logic**<br>지능형 알림 시스템 및<br>비즈니스 예외 처리 |
+
+### 🤝 팀의 강점
+* **역할 분담:** 도메인 주도 설계(DDD) 원칙에 따라 핵심 파트를 전담하여 전문성을 높였습니다.
+* **기술 패턴:** 안정적인 데이터 처리를 위해 **CQRS 패턴**(명령과 조회의 분리)을 도입하여 개발 효율성을 극대화했습니다.
+
+---
+
+## 3. 기술 및 구조
+
+### 🛠 기술 스택 소개 - 기술 아이콘으로 대체할 예정
+* **Backend:** Java 17, Spring Boot 3.x
+* **MSA Infra:** Spring Cloud Config, Netflix Eureka, Spring Cloud Gateway
+* **ORM/Mapper (CQRS):** - **Command(CUD):** Spring Data JPA (데이터 정합성 및 DDD 보장)
+    - **Query(Read):** MyBatis (복잡한 통계 쿼리 및 대용량 조회 성능 최적화)
+* **Security:** Spring Security, JWT (Antigravity 프로젝트 보안 모델 참조)
+* **Database:** MariaDB (Main)
+* **External API:** Spring-gen-ai (생성형 AI API)
+
+### 🏗 시스템 아키텍처
+MSA구조 사진 추가하기
+### 🌳 프로젝트 구조 (msaroot)
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                      API Gateway (Port 8000)                     │
-│                   Spring Cloud Gateway + JWT                     │
-└─────────────────────────────────────────────────────────────────┘
-                                 │
-        ┌────────────────────────┼────────────────────────┐
-        │                        │                        │
-        ▼                        ▼                        ▼
-┌───────────────┐    ┌───────────────────┐    ┌──────────────────┐
-│  User Service │    │ Ingredient Stock  │    │  Recipe Service  │
-│  (Auth/CRUD)  │    │    Service        │    │  (AI-Powered)    │
-└───────────────┘    └───────────────────┘    └──────────────────┘
-        │                        │                        │
-        └────────────────────────┼────────────────────────┘
-                                 │
-                                 ▼
-                    ┌─────────────────────┐
-                    │ Notification Service│
-                    └─────────────────────┘
-                                 │
-        ┌────────────────────────┴────────────────────────┐
-        ▼                                                 ▼
-┌───────────────┐                                ┌───────────────┐
-│ Eureka Server │                                │ Config Server │
-│  (Port 8761)  │                                │  (Port 8888)  │
-└───────────────┘                                └───────────────┘
+msaroot/
+├── config-server/      # 서비스별 중앙 집중식 설정 관리 (Git 연동)
+├── eureka-server/      # Service Discovery 및 서비스 상태 모니터링
+├── gateway-server/     # 모든 요청의 진입점 및 JWT 기반 인증/인가 처리
+├── recipe-service/     # AI 레시피 추천 및 CRUD를 담당하는 마이크로서비스
+├── user-service/       # 회원 관리 및 인증 도메인
+├── inventory-service/  # 식재료 재고 관리 및 지능형 알림 도메인
+└── common-library/     # 공통 DTO, 예외 처리, 유틸리티 공유 모듈
 ```
+---
+
+## 4. 핵심 기능
+
+### ⭐ 3대 핵심 솔루션
+1. **Generative AI 맞춤형 레시피 추천**
+    - 사용자가 선택한 재료 데이터를 기반으로 최적의 프롬프트를 생성하여 AI API에 전송합니다.
+    - 추천 결과는 JSON 형태로 가공되어 사용자에게 직관적으로 제공되며, <br>UX를 중시하여 추천 레시피를 바로 '내 레시피'와 '내 음식'으로 저장 가능하도록 설계 했습니다.
+
+2. **지능형 알림 시스템 (Intelligent Alert)**
+    - 로그인 시 스캔을 하는 방식으로 유통기한 임박(3일 전) 및 재고 부족 시 실시간 알림을 발송합니다.
+
+3. **식비 및 폐기율 통계 분석**
+    - 구매 비용 대비 폐기된 식재료 비용을 산출하여 '식재료 폐기율' 통계를 시각화하여 제공합니다.
 
 ---
 
-## 2. Technology Stack Assessment
+## 5. 설계 및 규칙
 
-### Core Technologies
-
-| Component | Technology | Version | Assessment |
-|-----------|------------|---------|------------|
-| Runtime | Java | 17 LTS | Excellent choice |
-| Framework | Spring Boot | 3.5.9 | Up-to-date |
-| Cloud | Spring Cloud | 2025.0.1 | Latest |
-| Gateway | Spring Cloud Gateway | - | Proper WebFlux-based |
-| Discovery | Netflix Eureka | - | Industry standard |
-| Config | Spring Cloud Config | - | Git-backed, good |
-| AI | Spring AI + Gemini | 1.1.0 | Modern approach |
-| Database | MariaDB + JPA/MyBatis | - | Solid choice |
-| Security | JWT + BCrypt | JJWT 0.12.6 | Well implemented |
-| Docs | SpringDoc OpenAPI | 2.8.15 | Good coverage |
-
+### 📜 개발 규칙 (Development Rules)
+* **코드 컨벤션:** [Naver 캠퍼스 핵데이 Java 코딩 컨벤션 준수](https://github.com/naver/hackday-conventions-java)
+* **Git Strategy:** Git-Flow 기반 (Main -> Develop -> Feature)
+* **Commit Convention:** 어떤 변경사항이 있었는지 자세하게 기록하는 문화 지향
+### 📅 WBS 및 설계
+* **WBS:** 스프레드시트에  보기좋게 작성하고 캡처하기
+* **설계 문서:** [ERD 및 API 명세서 링크]
+1. 산출물에 있는거 복붙하기
 ---
 
-## 3. Strengths
+## 6. 성과 및 기대효과
 
-### 3.1 Architecture Design
-- **Clear Service Boundaries:** Each microservice has a well-defined responsibility
-- **CQRS Pattern:** Properly implemented with `/command` and `/query` separation
-- **DDD Structure:** Domain-driven package organization with `application`, `domain`, and `infrastructure` layers
-- **Gateway Pattern:** Centralized routing, authentication, and circuit breaking
+### 🏆 프로젝트 성과
+* **기술적 성장:** Monolithic 서비스를 MSA로 전환하며 서비스 간 장애 전파를 차단하는 안정적 구조 확보.
+* **최적화:** JPA와 MyBatis를 혼합한 CQRS 패턴 적용으로 조회 성능 및 개발 생산성 동시 확보.
 
-### 3.2 Security Implementation
-- JWT with access (30min) and refresh (7 days) tokens
-- Refresh tokens stored as HttpOnly secure cookies
-- BCrypt password hashing
-- CSRF protection with SameSite=Strict
-- Stateless session management
-- Method-level security with `@PreAuthorize`
-
-### 3.3 Cloud-Native Patterns
-- Service discovery with dynamic port assignment
-- Centralized configuration management via Git
-- Circuit breaker pattern with Resilience4j
-- Load balancing with Spring Cloud LoadBalancer
-
-### 3.4 API Design
-- RESTful endpoint patterns
-- Standardized response format (`ApiResponse<T>`)
-- Global exception handling with custom error codes
-- Swagger/OpenAPI documentation
-
-### 3.5 AI Integration
-- Modern Spring AI framework integration
-- Google Gemini (2.5 Flash) for recipe recommendations
-- Resource-based prompt templates
-- Well-isolated in infrastructure layer
-
+### 💰 기대 효과
+* **개인적 측면:** 식재료 관리 편의성 증대, 메뉴 고민 시간 단축, 실질적인 식비 절감.
+* **사회적 측면 (ESG):** 음식물 쓰레기 배출을 원천적으로 감축하여 탄소 중립 및 환경 보호에 기여.
 ---
-
-## 4. Areas for Improvement
-
-### 4.1 Testing (Critical)
-
-**Current State:** Only placeholder test files exist with no actual test implementations.
-
-**Impact:** High risk of regression bugs and deployment failures.
-
-**Recommendations:**
-- Add unit tests for domain services (target: 80% coverage)
-- Implement integration tests for controllers
-- Add repository tests with embedded database
-- Create end-to-end tests for critical flows
-- Set up CI pipeline with test gates
-
-### 4.2 Observability (High Priority)
-
-**Current State:** Basic Actuator endpoints exposed but no structured logging, tracing, or monitoring.
-
-**Missing Components:**
-- No logback configuration for structured logging
-- No distributed tracing (Sleuth/Jaeger)
-- No custom metrics or dashboards
-- No health indicators for dependencies
-
-**Recommendations:**
-```yaml
-# Suggested additions
-- Spring Cloud Sleuth + Jaeger for tracing
-- Micrometer + Prometheus for metrics
-- ELK/Grafana stack for log aggregation
-- Custom health indicators for MariaDB, Eureka
-```
-
-### 4.3 Configuration Security (High Priority)
-
-**Issues Found:**
-- JWT secret exposed in `gateway-server/src/main/resources/application.yml`
-- Database credentials potentially in config files
-- No secrets management solution
-
-**Recommendations:**
-- Externalize secrets using environment variables
-- Implement HashiCorp Vault or AWS Secrets Manager
-- Use Spring Cloud Config encryption
-- Add `.gitignore` rules for sensitive files
-
-### 4.4 Containerization & Deployment (Medium Priority)
-
-**Current State:** No Docker or Kubernetes configuration found.
-
-**Missing:**
-- Dockerfiles for each service
-- docker-compose.yml for local development
-- Kubernetes manifests for production
-- CI/CD pipeline configuration
-- Deployment documentation
-
-**Recommendations:**
-- Create multi-stage Dockerfiles for optimized images
-- Add docker-compose for local development environment
-- Implement Helm charts for Kubernetes deployment
-- Set up GitHub Actions or GitLab CI
-
-### 4.5 Database Management (Medium Priority)
-
-**Issues:**
-- Manual DDL management (no migration tool)
-- No database versioning strategy
-- No connection pooling configuration documented
-
-**Recommendations:**
-- Implement Flyway or Liquibase for migrations
-- Configure HikariCP connection pooling
-- Add database indexing strategy
-- Document backup/recovery procedures
-
-### 4.6 Code Quality (Medium Priority)
-
-**Observations:**
-- Feign clients hardcode `http://localhost:8000` instead of using service discovery
-- Duplicate path typo in `UserServiceClient` (`//users`)
-- No code formatter or linter configuration
-- Limited input validation beyond `@Valid`
-
-**Recommendations:**
-- Fix Feign clients to use `lb://SERVICE-NAME` URLs
-- Add Checkstyle/SpotBugs configuration
-- Implement pre-commit hooks
-- Add comprehensive request validation
-
-### 4.7 Resilience (Low Priority)
-
-**Current State:** Circuit breaker only configured for user-service.
-
-**Recommendations:**
-- Extend circuit breaker to all inter-service calls
-- Add timeout configurations
-- Implement retry logic with exponential backoff
-- Add fallback data strategies for degraded operation
-
----
-
-## 5. Code Review Notes
-
-### 5.1 Positive Patterns Observed
-
-```java
-// Good: Standardized API response format
-public class ApiResponse<T> {
-    private Boolean success;
-    private T data;
-    private String errorCode;
-    private String message;
-    private LocalDateTime timestamp;
-}
-
-// Good: Global exception handling
-@RestControllerAdvice
-public class GlobalExceptionHandler {
-    @ExceptionHandler(BusinessException.class)
-    public ResponseEntity<ApiResponse<?>> handleBusinessException(...) {}
-}
-
-// Good: CQRS separation
-├── command/
-│   ├── application/     # Write operations
-│   └── domain/          # Domain logic
-└── query/
-    └── application/     # Read operations
-```
-
-### 5.2 Issues to Address
-
-```java
-// Issue: Hardcoded URL in Feign client
-@FeignClient(name = "user-service", url = "http://localhost:8000")
-// Should be: @FeignClient(name = "user-service")
-```
-
----
-
-## 6. Recommendations Summary
-
-### Immediate Actions (Sprint 1)
-1. Fix Feign client URLs to use service discovery
-2. Externalize JWT secret and sensitive configurations
-3. Add basic integration tests for critical endpoints
-4. Create docker-compose.yml for local development
-
-### Short-term (Sprint 2-3)
-5. Implement Flyway database migrations
-6. Add structured logging with correlation IDs
-7. Create Dockerfiles for all services
-8. Set up CI/CD pipeline with test coverage gates
-
-### Medium-term (Sprint 4-6)
-9. Add distributed tracing with Jaeger
-10. Implement comprehensive monitoring (Prometheus + Grafana)
-11. Create Kubernetes deployment manifests
-12. Add API rate limiting
-
-### Long-term Enhancements
-13. Consider event-driven architecture for notifications (Kafka/RabbitMQ)
-14. Implement Redis caching for frequently accessed data
-15. Add service mesh for production (Istio)
-16. Consider GraphQL for complex client queries
-
----
-
-## 7. Conclusion
-
-**Empty the Fridge** is a well-architected MSA project that demonstrates strong understanding of microservices patterns and Spring Cloud ecosystem. The codebase follows good practices with CQRS, DDD, and proper security implementation.
-
-The main gaps are in operational readiness:
-- **Testing:** Needs immediate attention
-- **Observability:** Critical for production debugging
-- **Deployment:** Containerization required for modern deployment
-
-With the recommended improvements, this project would be production-ready and maintainable at scale.
-
----
-
-**Rating:** 7/10
-
-| Category | Score |
-|----------|-------|
-| Architecture | 9/10 |
-| Code Quality | 7/10 |
-| Security | 8/10 |
-| Testing | 2/10 |
-| Documentation | 6/10 |
-| DevOps Readiness | 3/10 |
-| Observability | 3/10 |
-
----
-
-*This review was generated by analyzing the project structure, source code, and configurations.*
-
----
-
-## Appendix: Swagger UI Access
-
-### Accessing All APIs via Gateway (Recommended)
-
-After starting all services, access the aggregated Swagger UI at:
-
-```
-http://localhost:8000/swagger-ui.html
-```
-
-This provides a unified view of all microservice APIs with a dropdown to switch between services:
-- User Service
-- Ingredient Stock Service
-- Recipe Service
-- Notification Service
-
-### Direct Service Access
-
-Each microservice also exposes its own Swagger UI (requires knowing the dynamic port):
-
-| Service | Swagger UI URL |
-|---------|---------------|
-| User Service | `http://localhost:{port}/swagger-ui.html` |
-| Ingredient Stock Service | `http://localhost:{port}/swagger-ui.html` |
-| Recipe Service | `http://localhost:{port}/swagger-ui.html` |
-| Notification Service | `http://localhost:{port}/swagger-ui.html` |
-
-### Authentication in Swagger
-
-1. First, use the **User Service** login endpoint to obtain a JWT token
-2. Click the **Authorize** button in Swagger UI
-3. Enter your JWT token (without the "Bearer " prefix)
-4. All subsequent requests will include the Authorization header
-
-### API Documentation Endpoints
-
-| Endpoint | Description |
-|----------|-------------|
-| `/swagger-ui.html` | Swagger UI interface |
-| `/v3/api-docs` | OpenAPI 3.0 JSON specification |
-| `/v3/api-docs.yaml` | OpenAPI 3.0 YAML specification |
-
-### Starting the Services
-
-```bash
-# 1. Start Eureka Server (Port 8761)
-cd eureka-server && ./gradlew bootRun
-
-# 2. Start Config Server (Port 8888)
-cd config-server && ./gradlew bootRun
-
-# 3. Start Gateway Server (Port 8000)
-cd gateway-server && ./gradlew bootRun
-
-# 4. Start Microservices (Dynamic ports)
-cd user-service && ./gradlew bootRun
-cd ingredient-stock-service && ./gradlew bootRun
-cd recipe-service && ./gradlew bootRun
-cd notification-service && ./gradlew bootRun
-```
-
-After all services are running, visit `http://localhost:8000/swagger-ui.html` to explore all APIs.
+## 7. How To Develop This Project?
+1. 로그인 시 알림 생성 -> 재료 사용 시 재고 확인 후 알림 생성 AND 식재료 유통기한을 특정 시간에 조회 후 알림 생성
+2. ai 레시피 추천 서비스에 더해<br>공공 데이터를 가공해 ai를 사용하지 않고 추천받을 수 있는 기능 추가
