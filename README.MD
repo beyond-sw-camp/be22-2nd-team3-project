@@ -69,7 +69,8 @@
 
 ### 🏗 시스템 아키텍처
 
-MSA구조 사진 추가하기
+> ### MSA Architecture
+> ![msa-architecture.png](documents/image/architecture/msa-architecture.png)
 
 ### 🌳 프로젝트 구조 (msaroot)
 
@@ -114,8 +115,15 @@ msaroot/
 
 * **WBS:** 스프레드시트에 보기좋게 작성하고 캡처하기
 * **설계 문서:** [ERD 및 API 명세서 링크]
+> ### LOGICAL-ERD
+> ![logical-erd.png](documents/image/design/logical-erd.png)
 
-1. 산출물에 있는거 복붙하기
+> ### PHYSICAL-ERD
+> ![physical-erd.png](documents/image/design/physical-erd.png)
+
+> ### DDD(DOMAIN DRIVEN DESIGN)
+> ![domain-design.png](documents/image/design/domain-design.png)
+
 
 ---
 
