@@ -41,10 +41,6 @@ public class RecipeQueryService {
 		return new RecipeDetailResponse(dish, recipes);
 	}
 
-	public List<DishDTO> findDishesByUsername(String username) {
-		return dishMapper.selectDishesByUsername(username);
-	}
-
 	public List<RecipeDetailResponse> findDetailsByUser(int userNo) {
 		List<DishDTO> dishes = dishMapper.selectDishesByUser(userNo);
 		return dishes.stream()

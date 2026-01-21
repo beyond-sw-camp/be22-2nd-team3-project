@@ -53,7 +53,7 @@ public class RecipeQueryController {
       @AuthenticationPrincipal String userNo) {
 
     // UserPrincipal에서 PK(userNo)를 꺼내 서비스로 전달
-    List<DishDTO> dishes = recipeQueryService.findDishesByUsername(userNo);
+    List<DishDTO> dishes = recipeQueryService.findDishesByUserNo(Integer.parseInt(userNo));
     return ResponseEntity.ok(ApiResponse.success(dishes));
   }
 
